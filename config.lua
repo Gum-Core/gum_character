@@ -3,6 +3,8 @@ Config = {}
 Config.WalkFaceStyle = true
 
 Config.TimeToRespawn = 300--Second
+Config.SpawnCoords = {1240.63, -1282.88, 75.94, 312.0}
+
 Config.RespawnCoords = {
         [1] = {x=-288.67, y=810.37, z=120.10},--Valentine
         [2] = {x=2722.40, y=-1233.59, z=51.14},--SaintDenise
@@ -15,27 +17,6 @@ Config.RespawnCoords = {
         [9] = {x=1335.76, y=-7025.03, z=53.60},--Guarma
         [10] = {x=366.85, y=1464.64, z=179.61},--Fort Wallace
 }
-
----------Add item or weapon loss system------------
-Config.removeitems = true
-Config.removeweapons = true
-Config.removecash = true
-Config.removegold = true
-Config.removerole = true
-
-Config.blacklistedweapons = {
-    "WEAPON_MELEE_KNIFE",
-}
-
-Config.blacklisteditems = {
-    "brain",
-    "canteen",
-    "canteen_75",
-    "canteen_50",
-    "canteen_25",
-    "apple",
-}
-----------------------------------------------------------------
 
 Config.Language = {
     [1] = {text = "Char creator",},

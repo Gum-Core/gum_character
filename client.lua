@@ -218,6 +218,10 @@ end)
 function getMaleFromLang()
 	return Config.Language[175].text
 end
+RegisterNetEvent('gum_character:saveBarberAction')
+AddEventHandler('gum_character:saveBarberAction', function(skin_table_receive)
+    Skin_Table = skin_table_receive
+end)
 
 RegisterNetEvent('gum_character:send_data_back')
 AddEventHandler('gum_character:send_data_back', function(skin_table_receive, outfit_table_receive, coord_table_receive, isdeaded, update, new_char)
@@ -234,9 +238,9 @@ AddEventHandler('gum_character:send_data_back', function(skin_table_receive, out
         Citizen.InvokeNative(0xF808475FA571D823, true)
         Citizen.InvokeNative(0xBF25EB89375A37AD, 5, GetHashKey("PLAYER"), GetHashKey("PLAYER"))
         FreezeEntityPosition(PlayerPedId(), false)
-        Citizen.Wait(1000)
+        Citizen.Wait(500)
         while is_loaded_character == false do
-            Citizen.Wait(200)
+            Citizen.Wait(50)
         end
         startanim("script_rc@bch2@leadout@rsc_6", "wakeup_slow_charles", -1, 0)
         Citizen.Wait(100)
@@ -249,7 +253,7 @@ AddEventHandler('gum_character:send_data_back', function(skin_table_receive, out
         reload_scars()
         Citizen.Wait(200)
         local GetCoords = GetEntityCoords(PlayerPedId())
-        if GetDistanceBetweenCoords(GetCoords.x, GetCoords.y, GetCoords.z, 2946.486328125, -2084.0859375, 49.65571594238281, false) < 10.0 then
+        if GetDistanceBetweenCoords(GetCoords.x, GetCoords.y, GetCoords.z, 2946.486328125, -2084.0859375, 49.65571594238281, false) < 50.0 then
             SetEntityCoords(PlayerPedId(), 1258.91, -1291.45, 75.66-1.0)
         end
         TriggerServerEvent("gum_character:send_save_func")
@@ -274,6 +278,8 @@ RegisterCommand('db', function()
             ReloadCloth()
         end
     end
+    DetachEntity(PlayerPedId(), 1, 1)
+    ClearPedTasks(PlayerPedId())
 end)
 
 RegisterCommand('dbs', function()

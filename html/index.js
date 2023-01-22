@@ -17,6 +17,7 @@ $(function() {
         }
     }
     display(false)
+    display2(false)
 
     window.addEventListener('message', function(event) {
         var item = event.data;
@@ -37,13 +38,13 @@ $(function() {
                 display(false)
             }
         }
-        if (item.type === "volume_stop") {
-            if (item.status == true) {
-                stop_volume()
-            } else {
-                play_volume()
-            }
-        }
+        // if (item.type === "volume_stop") {
+        //     if (item.status == true) {
+        //         stop_volume()
+        //     } else {
+        //         play_volume()
+        //     }
+        // }
 
     })
 
