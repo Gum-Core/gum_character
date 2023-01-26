@@ -18,6 +18,11 @@ RegisterNUICallback('isgameinitiated', function(data, cb)
     })
 end)
 
+RegisterNetEvent('gum_character:setToTrue')
+AddEventHandler('gum_character:setToTrue', function()
+    online = true
+    spacebar = true
+end)
 RegisterCommand('character', function()
     exports['gum_notify']:DisplayLeftNotification("Character selection", "You switch character wait 10 second.", 'character', 5000)
     RemoveAllPedWeapons(PlayerPedId(), false, true)
@@ -325,7 +330,7 @@ function Has_Body_Loaded(ped, type, hash_for_load, text)
         Wait(100)
         Citizen.InvokeNative(0x704C908E9C405136, ped)
         Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, 0)
-        Wait(100)
+        Wait(0)
         readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, ped)
     end
     return true

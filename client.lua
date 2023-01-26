@@ -634,6 +634,7 @@ Citizen.CreateThread(function()
         StartCam(-560.51, -3776.08, 239.35, -90.00, 50.0)
         SetClockTime(12, 00, 00)
         SetEntityCoords(PlayerPedId(), -563.77, -3776.49, 238.56)
+        TriggerEvent("gum_character:setToTrue")
     else
         SetEntityCoords(PlayerPedId(), 270.33380126953125, -4076.84521484375, 215.644775390625)
         -- SetEntityCoords(PlayerPedId(), Coord_Table.x, Coord_Table.y, Coord_Table.z-1.0)
@@ -1639,19 +1640,32 @@ function Mount_States()
     end
 end
 
-function HasBodyComponentsLoaded(type, hash_for_load, text)
-    -- local readyLoad = false
-    -- while readyLoad == false do
-    --     Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), hash_for_load, false, true, true)
-    --     Wait(0)
-    --     Citizen.InvokeNative(0x704C908E9C405136, PlayerPedId())
-    --     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, 0)
-    --     Wait(0)
-    --     readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, PlayerPedId())
-    -- end
+-- function HasBodyComponentsLoaded(type, hash_for_load, text)
+--     -- local readyLoad = false
+--     -- while readyLoad == false do
+--     --     Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), hash_for_load, false, true, true)
+--     --     Wait(0)
+--     --     Citizen.InvokeNative(0x704C908E9C405136, PlayerPedId())
+--     --     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, 0)
+--     --     Wait(0)
+--     --     readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, PlayerPedId())
+--     -- end
 
-    Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), hash_for_load, false, true, true)
-    Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false);
+--     Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), hash_for_load, false, true, true)
+--     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false);
+--     return true
+-- end
+function HasBodyComponentsLoaded(ped, hash_for_load, text)
+    local readyLoad = false
+    local timeout = 0
+    while readyLoad == false do
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), hash_for_load, false, true, true)
+        Wait(100)
+        Citizen.InvokeNative(0x704C908E9C405136, PlayerPedId())
+        Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, 0)
+        Wait(0)
+        readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, PlayerPedId())
+    end
     return true
 end
 
