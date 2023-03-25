@@ -38,6 +38,7 @@ RegisterCommand('character', function()
     })
     Citizen.Wait(1000)
     SetEntityCoords(PlayerPedId(), 1407.5758056640625, -1139.779541015625, 75.34298706054688)
+    TriggerServerEvent('gum_character:check_character')
 end)
 
 RegisterNetEvent('gum_character:del_old')
