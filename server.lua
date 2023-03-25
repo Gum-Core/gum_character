@@ -16,7 +16,11 @@ AddEventHandler('gum_character:check_character', function()
 			exports.ghmattimysql:execute('SELECT * FROM characters WHERE identifier = @identifier' , {['identifier'] = identifier}, function(result)
 				if result[1] ~= nil then
 					TriggerClientEvent("gum_character:check_char", _source, true)
-					TriggerClientEvent("gum_character:select_char", tonumber(_source), result, User)
+					if Config.Debug == true then
+						TriggerClientEvent("gum_character:select_charDebug", tonumber(_source), result, User)
+					else
+						TriggerClientEvent("gum_character:select_char", tonumber(_source), result, User)
+					end
 				end
 			end)
 		else

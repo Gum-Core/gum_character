@@ -1,5 +1,5 @@
 Config = {}
-
+Config.Debug = true
 Config.WalkFaceStyle = true
 
 Config.TimeToRespawn = 300--Second

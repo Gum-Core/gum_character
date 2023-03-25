@@ -53,6 +53,17 @@ Citizen.CreateThread(function()
         Citizen.Wait(1000)
     end
 end)
+RegisterNetEvent('gum_character:select_charDebug')
+AddEventHandler('gum_character:select_charDebug', function(table, tableuser)
+    PlayerTable = table
+    exports['gum_character']:loading(false)
+    for k,v in pairs(PlayerTable) do
+        if k == tonumber(1) then
+            TriggerServerEvent("gum_character:select_char", v.charidentifier, json.decode(v.skinPlayer), json.decode(v.compPlayer), json.decode(v.coords), v.isdead)      
+        end
+    end
+end)
+
 RegisterNetEvent('gum_character:select_char')
 AddEventHandler('gum_character:select_char', function(table, tableuser)
     -- Citizen.Wait(1000)
@@ -202,7 +213,6 @@ AddEventHandler('gum_character:select_char', function(table, tableuser)
     SetEntityHeading(character_3, -44.72)
     SetEntityHeading(character_2, -30.72)
     Citizen.Wait(500)
-    -- exports['gum_character']:loading(false) 
     SetNuiFocus(true, true)
     for k,v in pairs(PlayerTable) do
         if k == 1 then
@@ -227,6 +237,7 @@ AddEventHandler('gum_character:select_char', function(table, tableuser)
         end
     end
     StartCam(267.31, -4079.88, 216.91, 158.99, 35.0)
+    exports['gum_character']:loading(false) 
     online = true
     spacebar = true
 end)

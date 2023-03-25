@@ -32,8 +32,7 @@ files {
 	'html/r_arrow.png',
     'html/ar_arrow.png',
     'html/button.png',
-    'html/enter.mp4',
-    'html/gumFrame.mp4',
+    'html/screen.jpg',
 }
 
 export 'getMaleFromLang'

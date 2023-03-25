@@ -230,34 +230,57 @@ AddEventHandler('gum_character:send_data_back', function(skin_table_receive, out
     Coord_Table = coord_table_receive
     isDead = isdeaded
     Citizen.Wait(0)
-    if update == true then
-        SetEntityCoords(PlayerPedId(), Coord_Table.x, Coord_Table.y, Coord_Table.z-1.0)
+    if Config.Debug then
+        TriggerEvent("gum_character:setToTrue")
+        EndCam()
         FreezeEntityPosition(PlayerPedId(), true)
-        SetEntityVisible(PlayerPedId(), false)
         Data_Character_Load(true)
+        reload_scars()
         Citizen.InvokeNative(0xF808475FA571D823, true)
         Citizen.InvokeNative(0xBF25EB89375A37AD, 5, GetHashKey("PLAYER"), GetHashKey("PLAYER"))
         FreezeEntityPosition(PlayerPedId(), false)
-        Citizen.Wait(500)
-        while is_loaded_character == false do
-            Citizen.Wait(50)
-        end
-        startanim("script_rc@bch2@leadout@rsc_6", "wakeup_slow_charles", -1, 0)
-        Citizen.Wait(100)
         exports['gum_character']:loading(false)
-        SetEntityVisible(PlayerPedId(), true)
         SendNUIMessage({
             type = "volume_stop",
             status = true,
         })
-        reload_scars()
-        Citizen.Wait(200)
-        local GetCoords = GetEntityCoords(PlayerPedId())
-        if GetDistanceBetweenCoords(GetCoords.x, GetCoords.y, GetCoords.z, 2946.486328125, -2084.0859375, 49.65571594238281, false) < 50.0 then
-            SetEntityCoords(PlayerPedId(), 1258.91, -1291.45, 75.66-1.0)
-        end
         TriggerServerEvent("gum_character:send_save_func")
         TriggerEvent("gum_inventory:can_save")
+        Citizen.Wait(500)
+        SetEntityCoords(PlayerPedId(), Coord_Table.x, Coord_Table.y, Coord_Table.z-1.0)
+        Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 0, 150.0)
+        ExecuteCommand("db")
+    else
+        if update == true then
+            SetEntityCoords(PlayerPedId(), Coord_Table.x, Coord_Table.y, Coord_Table.z-1.0)
+            FreezeEntityPosition(PlayerPedId(), true)
+            SetEntityVisible(PlayerPedId(), false)
+            Data_Character_Load(true)
+            Citizen.InvokeNative(0xF808475FA571D823, true)
+            Citizen.InvokeNative(0xBF25EB89375A37AD, 5, GetHashKey("PLAYER"), GetHashKey("PLAYER"))
+            FreezeEntityPosition(PlayerPedId(), false)
+            Citizen.Wait(500)
+            while is_loaded_character == false do
+                Citizen.Wait(10)
+            end
+            startanim("script_rc@bch2@leadout@rsc_6", "wakeup_slow_charles", -1, 0)
+            Citizen.Wait(200)
+            exports['gum_character']:loading(false)
+            SetEntityVisible(PlayerPedId(), true)
+            SendNUIMessage({
+                type = "volume_stop",
+                status = true,
+            })
+            reload_scars()
+            Citizen.Wait(200)
+            local GetCoords = GetEntityCoords(PlayerPedId())
+            if GetDistanceBetweenCoords(GetCoords.x, GetCoords.y, GetCoords.z, 2946.486328125, -2084.0859375, 49.65571594238281, false) < 50.0 then
+                SetEntityCoords(PlayerPedId(), 1258.91, -1291.45, 75.66-1.0)
+            end
+            TriggerServerEvent("gum_character:send_save_func")
+            TriggerEvent("gum_inventory:can_save")
+            Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 0, 150.0)
+        end
     end
 end)
 
@@ -286,7 +309,7 @@ RegisterCommand('dbs', function()
     local stamina = Citizen.InvokeNative(0x36731AC041289BB1, PlayerPedId(), 1) --health
     local health = Citizen.InvokeNative(0x36731AC041289BB1, PlayerPedId(), 0) --health
     if stamina ~= nil and stamina ~= false and health ~= nil and health ~= false then
-        Data_Character_Load(nil, true)
+        Data_Character_Load(nil)
     end
 end)
 
@@ -601,66 +624,72 @@ end)
 
 
 Citizen.CreateThread(function()
-    Citizen.Wait(1000)
-    TriggerServerEvent("gum_character:check_character")
-    Citizen.Wait(3000)
-    if not have_character then
-        Citizen.InvokeNative(0x17E0198B3882C2CB, PlayerPedId())
-        Button_Prompt()
-        Button_Prompt_2()
-        Citizen.Wait(500)
-        Citizen.InvokeNative(0x9E211A378F95C97C, 183712523)
-        Citizen.InvokeNative(0x9E211A378F95C97C, -1699673416)
-        Citizen.InvokeNative(0x9E211A378F95C97C, 1679934574)
-        Citizen.Wait(1500)
-        SelectChar()
-        Citizen.Wait(1500)
-        DeletePed(PedFemale)
-        DeletePed(PedMale)
-        SelectChar()
-        Citizen.Wait(1500)
-        DeletePed(PedFemale)
-        DeletePed(PedMale)
-        Citizen.Wait(1500)
-        SelectChar()
-        Citizen.Wait(1500)
-        DeletePed(PedFemale)
-        DeletePed(PedMale)
-        Citizen.Wait(1500)
-        SetEntityCoords(PlayerPedId(), -563.77, -3776.49, 238.56)
-        SelectChar()
+    if Config.Debug == true then
+        TriggerServerEvent("gum_character:check_character")
         exports['gum_character']:loading(false) 
-        TriggerEvent("gum_inventory:reset_inventory")
-        StartCam(-560.51, -3776.08, 239.35, -90.00, 50.0)
-        SetClockTime(12, 00, 00)
-        SetEntityCoords(PlayerPedId(), -563.77, -3776.49, 238.56)
-        TriggerEvent("gum_character:setToTrue")
     else
-        SetEntityCoords(PlayerPedId(), 270.33380126953125, -4076.84521484375, 215.644775390625)
-        -- SetEntityCoords(PlayerPedId(), Coord_Table.x, Coord_Table.y, Coord_Table.z-1.0)
-        -- FreezeEntityPosition(PlayerPedId(), true)
-        -- SetEntityVisible(PlayerPedId(), false)
-        -- Data_Character_Load()
-        -- Citizen.InvokeNative(0xF808475FA571D823, true)
-        -- Citizen.InvokeNative(0xBF25EB89375A37AD, 5, GetHashKey("PLAYER"), GetHashKey("PLAYER"))
-        -- if Config.WalkFaceStyle then
-        --     TriggerEvent("gum_walkingfacestyle:active")
-        -- end
-        -- FreezeEntityPosition(PlayerPedId(), false)
-        -- Citizen.Wait(1000)
-        -- playAnim("script_rc@bch2@leadout@rsc_6", "wakeup_slow_charles", -1, 0)
-        -- Citizen.Wait(200)
-        -- exports['gum_character']:loading(false) 
-        -- SetEntityVisible(PlayerPedId(), true)
-        -- Citizen.Wait(500)
-        -- if Config.WalkFaceStyle then
-        --     TriggerEvent("gum_walkingfacestyle:active")
-        -- end
-        -- local GetCoords = GetEntityCoords(PlayerPedId())
-        -- if GetDistanceBetweenCoords(GetCoords.x, GetCoords.y, GetCoords.z, 2946.486328125, -2084.0859375, 49.65571594238281, false) < 10.0 then
-        --     SetEntityCoords(PlayerPedId(), 2723.339599609375, -1446.4417724609375, 46.32297897338867-1.0)
-        -- end
-        -- TriggerServerEvent("gum_character:send_save_func")
+        Citizen.Wait(1000)
+        exports['gum_character']:loading(true) 
+        TriggerServerEvent("gum_character:check_character")
+        Citizen.Wait(3000)
+        if not have_character then
+            Citizen.InvokeNative(0x17E0198B3882C2CB, PlayerPedId())
+            Button_Prompt()
+            Button_Prompt_2()
+            Citizen.Wait(500)
+            Citizen.InvokeNative(0x9E211A378F95C97C, 183712523)
+            Citizen.InvokeNative(0x9E211A378F95C97C, -1699673416)
+            Citizen.InvokeNative(0x9E211A378F95C97C, 1679934574)
+            Citizen.Wait(1500)
+            SelectChar()
+            Citizen.Wait(1500)
+            DeletePed(PedFemale)
+            DeletePed(PedMale)
+            SelectChar()
+            Citizen.Wait(1500)
+            DeletePed(PedFemale)
+            DeletePed(PedMale)
+            Citizen.Wait(1500)
+            SelectChar()
+            Citizen.Wait(1500)
+            DeletePed(PedFemale)
+            DeletePed(PedMale)
+            Citizen.Wait(1500)
+            SetEntityCoords(PlayerPedId(), -563.77, -3776.49, 238.56)
+            SelectChar()
+            TriggerEvent("gum_inventory:reset_inventory")
+            StartCam(-560.51, -3776.08, 239.35, -90.00, 50.0)
+            SetClockTime(12, 00, 00)
+            SetEntityCoords(PlayerPedId(), -563.77, -3776.49, 238.56)
+            TriggerEvent("gum_character:setToTrue")
+            exports['gum_character']:loading(false) 
+        else
+            SetEntityCoords(PlayerPedId(), 270.33380126953125, -4076.84521484375, 215.644775390625)
+            -- SetEntityCoords(PlayerPedId(), Coord_Table.x, Coord_Table.y, Coord_Table.z-1.0)
+            -- FreezeEntityPosition(PlayerPedId(), true)
+            -- SetEntityVisible(PlayerPedId(), false)
+            -- Data_Character_Load()
+            -- Citizen.InvokeNative(0xF808475FA571D823, true)
+            -- Citizen.InvokeNative(0xBF25EB89375A37AD, 5, GetHashKey("PLAYER"), GetHashKey("PLAYER"))
+            -- if Config.WalkFaceStyle then
+            --     TriggerEvent("gum_walkingfacestyle:active")
+            -- end
+            -- FreezeEntityPosition(PlayerPedId(), false)
+            -- Citizen.Wait(1000)
+            -- playAnim("script_rc@bch2@leadout@rsc_6", "wakeup_slow_charles", -1, 0)
+            -- Citizen.Wait(200)
+            -- exports['gum_character']:loading(false) 
+            -- SetEntityVisible(PlayerPedId(), true)
+            -- Citizen.Wait(500)
+            -- if Config.WalkFaceStyle then
+            --     TriggerEvent("gum_walkingfacestyle:active")
+            -- end
+            -- local GetCoords = GetEntityCoords(PlayerPedId())
+            -- if GetDistanceBetweenCoords(GetCoords.x, GetCoords.y, GetCoords.z, 2946.486328125, -2084.0859375, 49.65571594238281, false) < 10.0 then
+            --     SetEntityCoords(PlayerPedId(), 2723.339599609375, -1446.4417724609375, 46.32297897338867-1.0)
+            -- end
+            -- TriggerServerEvent("gum_character:send_save_func")
+        end
     end
 end)
 
@@ -895,14 +924,34 @@ function ProcessNewPosition()
 end
 
 
-
 Citizen.CreateThread(function()
     while true do
         if not have_character then
             local UpScrollMouse = {`INPUT_CREATOR_LT`, `INPUT_PREV_WEAPON`}
             local DownScrollMouse = {`INPUT_CREATOR_RT`, `INPUT_NEXT_WEAPON`}
-            DrawLightWithRange(tonumber(string.format("%.2f", -562.88)), tonumber(string.format("%.2f", -3782.36)), tonumber(string.format("%.2f", 240.49)), 255, 255, 255, tonumber(string.format("%.2f", 10.0)), tonumber(string.format("%.2f", 150.0)))
-            DrawLightWithRange(tonumber(string.format("%.2f", -559.25)), tonumber(string.format("%.2f", -3776.16)), tonumber(string.format("%.2f", 240.49)), 255, 255, 255, tonumber(string.format("%.2f", 10.0)), tonumber(string.format("%.2f", 150.0)))
+            if prop1 == nil then--
+                prop1 = CreateObject(GetHashKey("p_lampfactory04x"), -562.7855834960938, -3782.244384765625, 240.480224609375, false, false, false)
+            end
+            if prop2 == nil then
+                prop2 = CreateObject(GetHashKey("p_lamp35x"), -561.9463500976562, -3783.029541015625, 237.6020050048828, false, false, false)
+            end
+            if prop3 == nil then
+                prop3 = CreateObject(GetHashKey("p_lamp35x"), -561.9929809570312, -3781.240966796875, 237.6020050048828, false, false, false)
+            end
+            if compareChar == nil then
+                while not HasModelLoaded("re_prisonwagon_males_01") do
+                    Wait(0)
+                    Citizen.CreateThread(function()
+                        RequestModel("re_prisonwagon_males_01")
+                    end)
+                end
+                compareChar = CreatePed(GetHashKey("re_prisonwagon_males_01"), -563.4608764648438, -3783.357421875, 238.59747314453125, -92.6, false, false, false, false)
+                while not DoesEntityExist(compareChar) do
+                    Wait(0)
+                end
+            end
+            -- DrawLightWithRange(tonumber(string.format("%.2f", -562.88)), tonumber(string.format("%.2f", -3782.36)), tonumber(string.format("%.2f", 240.49)), 255, 255, 255, tonumber(string.format("%.2f", 10.0)), tonumber(string.format("%.2f", 150.0)))
+            -- DrawLightWithRange(tonumber(string.format("%.2f", -559.25)), tonumber(string.format("%.2f", -3776.16)), tonumber(string.format("%.2f", 240.49)), 255, 255, 255, tonumber(string.format("%.2f", 10.0)), tonumber(string.format("%.2f", 150.0)))
             opt = 5
             if active_buttons_create_select == false then
                 local create_char = CreateVarString(10, 'LITERAL_STRING', ""..Config.Language[177].text.." "..char_text.."")
@@ -1419,65 +1468,83 @@ function ApplyDefaultSkinCanaryEdition(ped)
         for k,v in pairs(Config.DefaultChar["Male"]) do
             if k == 1 then
                 for x,y in pairs(v) do
-                    Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, 612262189, true, true, true);
+                    loadDataToPed(ped, tonumber(612262189))
                     if x == "Body" then
                         local hash = ("0x"..y[1])
-                        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, tonumber(hash), true, true, true)
+                        loadDataToPed(ped, tonumber(hash))
                     end
-                    Citizen.Wait(100)
                     if x == "Legs" then
                         local hash = ("0x"..y[1])
-                        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, tonumber(hash), true, true, true)
+                        loadDataToPed(ped, tonumber(hash))
                     end
-                    Citizen.Wait(100)
                     if x == "Heads" then
                         local hash = ("0x"..y[1])
-                        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, tonumber(hash), true, true, true)
+                        loadDataToPed(ped, tonumber(hash))
                     end
-                    Citizen.Wait(100)
                     if x == "HeadTexture" then
                         local hash = ("0x"..y[1])
-                        Citizen.InvokeNative(0xD710A5007C2AC539, ped, tonumber(hash), 0)
-                        Citizen.Wait(50)
+                        loadDataToPed(ped, tonumber(hash))
                     end
-                    Citizen.Wait(100)
-                    Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, false)
                 end
             end
         end
         Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, false)
+        clothesLoadToPed(ped, true)
     else
         for k,v in pairs(Config.DefaultChar["Female"]) do
             if k == 1 then
                 for x,y in pairs(v) do
-                    Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, 928002221, true, true, true);
+                    loadDataToPed(ped, tonumber(928002221))
                     if x == "Body" then
                         local hash = ("0x"..y[1])
-                        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, tonumber(hash), true, true, true);
+                        loadDataToPed(ped, tonumber(hash))
                     end
-                    Citizen.Wait(100)
                     if x == "Legs" then
                         local hash = ("0x"..y[1])
-                        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, tonumber(hash), true, true, true);
+                        loadDataToPed(ped, tonumber(hash))
                     end
-                    Citizen.Wait(100)
                     if x == "Heads" then
                         local hash = ("0x"..y[1])
-                        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, tonumber(hash), true, true, true);
+                        loadDataToPed(ped, tonumber(hash))
                     end
-                    Citizen.Wait(100)
                     if x == "HeadTexture" then
                         local hash = ("0x"..y[1])
-                        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, tonumber(hash), true, true, true);
+                        loadDataToPed(ped, tonumber(hash))
                     end
-                    Citizen.Wait(100)
                 end
             end
         end
-
-        Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, false)
     end
+    Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, false)
+    clothesLoadToPed(ped, false)
+end
 
+function clothesLoadToPed(ped, male)
+    if male == true then
+        loadDataToPed(ped, 2629379040)
+        loadDataToPed(ped, 1067738423)
+        loadDataToPed(ped, 1295288978)
+        loadDataToPed(ped, 4076107613)
+        loadDataToPed(ped, 2120703472)
+    else
+        loadDataToPed(ped, 396308894)
+        loadDataToPed(ped, 4045806460)
+        loadDataToPed(ped, 3580604438)
+        loadDataToPed(ped, 2857028536)
+        loadDataToPed(ped, 3497438724)
+    end
+end
+
+function loadDataToPed(ped, hash)
+    local readyLoad = false
+    while readyLoad == false do
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, tonumber(hash), false, true, true)
+        Wait(100)
+        Citizen.InvokeNative(0x704C908E9C405136, ped)
+        Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, 0)
+        Wait(0)
+        readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, ped)
+    end
 end
 
 function StartCam(x,y,z, heading, zoom)
@@ -1697,7 +1764,7 @@ function SetModelPed(pped, name)
 	end
 end
 
-function Data_Character_Load(first, state)
+function Data_Character_Load(state)
     local model = GetHashKey(Skin_Table["sex"])
     RequestModel(model)
     while not HasModelLoaded(model) do
@@ -2072,6 +2139,7 @@ function Data_Character_Load(first, state)
     if Config.WalkFaceStyle then
         TriggerEvent("gum_walkingfacestyle:active")
     end
+    Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 0, 150.0)
 end
 
 function ReloadCloth()
@@ -2291,12 +2359,31 @@ function ReloadCloth()
     Citizen.InvokeNative(0x5653AB26C82938CF, PlayerPedId(), 0xE323, Skin_Table["ChinD"]);
     Citizen.Wait(0)
     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false)
+    local readyLoad = false
+    while readyLoad == false do
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), Skin_Table["HeadType"], false, true, true)
+        Wait(100)
+        Citizen.InvokeNative(0x704C908E9C405136, PlayerPedId())
+        Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, 0)
+        Wait(0)
+        readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, PlayerPedId())
+    end
+
+    local readyLoad = false
+    while readyLoad == false do
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), Skin_Table["BodyType"], false, true, true)
+        Wait(100)
+        Citizen.InvokeNative(0x704C908E9C405136, PlayerPedId())
+        Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, 0)
+        Wait(0)
+        readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, PlayerPedId())
+    end
     Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), Skin_Table["HeadType"], false, true, true)
     Citizen.InvokeNative(0x1902C4CFCC5BE57C, PlayerPedId(), Skin_Table["BodyType"], false, true, true);
     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false);
     Citizen.InvokeNative(0x1902C4CFCC5BE57C, PlayerPedId(), Skin_Table["Waist"], false, true, true);
     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false);
-    Citizen.Wait(0)
+    Citizen.Wait(200)
     Citizen.InvokeNative(0xD710A5007C2AC539, PlayerPedId(), 0xEA24B45E, 0);
     Citizen.InvokeNative(0xD710A5007C2AC539, PlayerPedId(), 0x864B03AE, 0);
     Citizen.InvokeNative(0xD710A5007C2AC539, PlayerPedId(), 0xF8016BCA, 0);
@@ -2461,6 +2548,7 @@ function ReloadCloth()
     if Skin_Table["HairAccesorie"] ~= -1 and Skin_Table["HairAccesorie"] ~= nil then
         Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(),  Skin_Table["HairAccesorie"], true, true, false);
     end
+    Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 0, 150.0)
 end
 
 function reload_scars()
